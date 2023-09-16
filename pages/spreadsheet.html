@@ -1,3 +1,14 @@
+<!--
+   _____                          _     _               _   
+  / ____|                        | |   | |             | |  
+ | (___  _ __  _ __ ___  __ _  __| |___| |__   ___  ___| |_ 
+  \___ \| '_ \| '__/ _ \/ _` |/ _` / __| '_ \ / _ \/ _ \ __|
+  ____) | |_) | | |  __/ (_| | (_| \__ \ | | |  __/  __/ |_ 
+ |_____/| .__/|_|  \___|\__,_|\__,_|___/_| |_|\___|\___|\__|
+        | |                                                 
+        |_|     
+-->
+
 <head>
 
   <!-- Config -->
@@ -16,6 +27,9 @@
 </head>
 
 <body>
+
+  <!-- Search bar -->
+  <input type="text" id="search" placeholder="Search...">
 
   <!-- Table -->
   <div class="container">
@@ -40,7 +54,6 @@
 
   </div>
 
-  <!-- Script -->
   <script>
 
     $(document).ready(function () {
@@ -48,17 +61,48 @@
       // Read the spreadsheet.json file
       $.getJSON('../public/data/spreadsheet.json', function (data) {
 
-        // Create a variable to store the search term
-        var searchTerm = '';
+        // Store the spreadsheet data in a variable
+        var spreadsheetData = data;
+
+        // Update the spreadsheet with the given data
+        function updateSpreadsheet(data) {
+
+          // Clear the spreadsheet
+          $('#product_table').empty();
+
+          // Iterate over the data and add a row for each product
+          for (var i = 0; i < data.length; i++) {
+
+            // Get the product information
+            var image = data[i].image;
+            var name = data[i].name;
+            var priceYuan = data[i].priceYuan;
+            var priceUSD = data[i].priceUSD;
+            var url = data[i].url;
+
+            // Create a row for the product
+            var row = $('<tr>');
+            row.append('<td><img src="' + image + '" alt="' + name + '" width="100px"></td>');
+            row.append('<td>' + name + '</td>');
+            row.append('<td>' + priceYuan + '</td>');
+            row.append('<td>' + priceUSD + '</td>');
+            row.append('<td><a href="' + url + '">' + url + '</a></td>');
+            $('#product_table').append(row);
+          }
+
+        }
+
+        // Update the spreadsheet with the spreadsheet data
+        updateSpreadsheet(spreadsheetData);
 
         // Listen for changes to the search field
         $('#search').on('input', function () {
 
           // Get the search term
-          searchTerm = $(this).val();
+          var searchTerm = $(this).val();
 
-          // Filter the data based on the search term
-          var filteredData = data.filter(function (product) {
+          // Filter the spreadsheet data based on the search term
+          var filteredData = spreadsheetData.filter(function (product) {
             return product.name.toLowerCase().includes(searchTerm.toLowerCase());
           });
 
@@ -69,38 +113,8 @@
 
       });
 
-      // Update the spreadsheet with the given data
-      function updateSpreadsheet(data) {
-
-        // Clear the spreadsheet
-        $('#product_table').empty();
-
-        // Iterate over the data and add a row for each product
-        for (var i = 0; i < data.length; i++) {
-
-          // Get the product information
-          var image = data[i].image;
-          var name = data[i].name;
-          var priceYuan = data[i].priceYuan;
-          var priceUSD = data[i].priceUSD;
-          var url = data[i].url;
-
-          // Create a row for the product
-          var row = $('<tr>');
-          row.append('<td><img src="' + image + '" alt="' + name + '" width="100px"></td>');
-          row.append('<td>' + name + '</td>');
-          row.append('<td>' + priceYuan + '</td>');
-          row.append('<td>' + priceUSD + '</td>');
-          row.append('<td><a href="' + url + '">' + url + '</a></td>');
-          $('#product_table').append(row);
-        }
-
-      }
-
     });
 
   </script>
 
 </body>
-
-</html>
