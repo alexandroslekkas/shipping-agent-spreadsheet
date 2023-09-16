@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Find Item</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="findItem.js"></script>
+</head>
+<body>
+
+    <form action="#">
+        <input type="text" name="taobao_link_or_id" placeholder="Enter a Taobao link or ID">
+        <button type="submit">Submit</button>
+    </form>
+
+    <div id="product_info"></div>
+
+    <script>
+
+        $(document).ready(function() {
+        
+            $('form').submit(function(event) {
+        
+                // Prevent the default form submission
+                event.preventDefault();
+        
+                // Get the Taobao link or ID from the form
+                var taobaoLinkOrId = $('input[name="taobao_link_or_id"]').val();
+        
+                // Extract the ID from the Taobao link
+                var itemId = taobaoLinkOrId.match(/id=(\d+)/)[1];
+        
+                // Make a request to the Taobao API
+                $.ajax({
+                    url: 'https://taobao-api.p.rapidapi.com/api?api=item_detail_simple&num_iid=' + itemId,
+                    headers: {
+                        'X-RapidAPI-Key': 'a8c7e5e16fmsha4154655e12d1c2p1c674djsn6ee8281974b3',
+                        'X-RapidAPI-Host': 'taobao-api.p.rapidapi.com'
+                    }
+                }).done(function(response) {
+        
+                    // Get the product information from the response
+                    var title = response.result.item.title;
+                    var price = response.result.item.price;
+                    var image = response.result.item.images[0];
+        
+                    // Check if the images array is null
+                    if (image != null) {
+                        // Display the product information
+                        $('#product_info').html('<h2>' + title + '</h2><img src="' + image + '" alt="' + title + '"><p>' + price + '</p>');
+                    } else {
+                        // Display a message if the images array is null
+                        $('#product_info').html('<h2>No product image available</h2>');
+                    }
+        
+                });
+        
+            });
+        
+        });
+        
+        </script>
+        
+
+</body>
+</html>
