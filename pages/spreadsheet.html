@@ -48,43 +48,8 @@
       // Read the spreadsheet.json file
       $.getJSON('../public/data/spreadsheet.json', function (data) {
 
-        // Store the spreadsheet data in a variable
-        var spreadsheetData = data;
-
-        // Update the spreadsheet with the given data
-        function updateSpreadsheet(data) {
-
-          // Clear the spreadsheet
-          $('#product_table').empty();
-
-          // Iterate over the data and add a row for each product
-          for (var i = 0; i < data.length; i++) {
-
-            // Get the product information
-            var image = data[i].image;
-            var name = data[i].name;
-            var priceYuan = data[i].priceYuan;
-            var priceUSD = data[i].priceUSD;
-            var url = data[i].url;
-
-            // Highlight the search term in the product name
-            name = name.replace(/<([^>]+)>/g, ''); // Remove any HTML tags from the product name
-            name = name.replace(new RegExp(searchTerm, 'gi'), '<span style="background-color: yellow;">' + searchTerm + '</span>'); // Highlight the search term in yellow
-
-            // Create a row for the product
-            var row = $('<tr>');
-            row.append('<td><img src="' + image + '" alt="' + name + '" width="100px"></td>');
-            row.append('<td>' + name + '</td>');
-            row.append('<td>' + priceYuan + '</td>');
-            row.append('<td>' + priceUSD + '</td>');
-            row.append('<td><a href="' + url + '">' + url + '</a></td>');
-            $('#product_table').append(row);
-          }
-
-        }
-
-        // Update the spreadsheet with the spreadsheet data
-        updateSpreadsheet(spreadsheetData);
+        // Create a variable to store the search term
+        var searchTerm = '';
 
         // Listen for changes to the search field
         $('#search').on('input', function () {
@@ -92,20 +57,45 @@
           // Get the search term
           searchTerm = $(this).val();
 
-          // Filter the spreadsheet data based on the search term
-          var filteredData = spreadsheetData.filter(function (product) {
+          // Filter the data based on the search term
+          var filteredData = data.filter(function (product) {
             return product.name.toLowerCase().includes(searchTerm.toLowerCase());
           });
 
           // Update the spreadsheet with the filtered data
           updateSpreadsheet(filteredData);
 
-          // Show the number of products found in the search bar
-          $('#search-results').text(filteredData.length + ' results');
-
         });
 
       });
+
+      // Update the spreadsheet with the given data
+      function updateSpreadsheet(data) {
+
+        // Clear the spreadsheet
+        $('#product_table').empty();
+
+        // Iterate over the data and add a row for each product
+        for (var i = 0; i < data.length; i++) {
+
+          // Get the product information
+          var image = data[i].image;
+          var name = data[i].name;
+          var priceYuan = data[i].priceYuan;
+          var priceUSD = data[i].priceUSD;
+          var url = data[i].url;
+
+          // Create a row for the product
+          var row = $('<tr>');
+          row.append('<td><img src="' + image + '" alt="' + name + '" width="100px"></td>');
+          row.append('<td>' + name + '</td>');
+          row.append('<td>' + priceYuan + '</td>');
+          row.append('<td>' + priceUSD + '</td>');
+          row.append('<td><a href="' + url + '">' + url + '</a></td>');
+          $('#product_table').append(row);
+        }
+
+      }
 
     });
 
