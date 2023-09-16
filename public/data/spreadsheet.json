@@ -1,0 +1,9 @@
+[
+  {
+    "image": "https://i.imgur.com/example-image.png",
+    "name": "Example Product",
+    "priceYuan": 100,
+    "priceUSD": 15,
+    "url": "https://example.com/example-product"
+  }
+]
