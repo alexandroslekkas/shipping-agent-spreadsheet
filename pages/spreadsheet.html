@@ -63,12 +63,15 @@
 
         // Store the spreadsheet data in a variable
         var spreadsheetData = data;
+        console.log("[+] Spreadsheet data loaded");
 
         // Update the spreadsheet with the given data
         function updateSpreadsheet(data) {
 
-          // Clear the spreadsheet
-          $('#product_table').empty();
+          console.log("[>] Updating spreadsheet with " + data.length + " products"); // Log to console
+
+          $('#product_table').empty(); // Clear the spreadsheet
+          console.log("[>] Spreadsheet cleared")
 
           // Iterate over the data and add a row for each product
           for (var i = 0; i < data.length; i++) {
@@ -89,6 +92,8 @@
             row.append('<td><a href="' + url + '">' + url + '</a></td>');
             $('#product_table').append(row);
           }
+
+          console.log("[+] Spreadsheet updated")
 
         }
 
