@@ -17,6 +17,14 @@
 
     <script>
 
+        function removeTwoSlashes(url) {
+        if (url.startsWith('//')) {
+            return url.substring(2);
+        } else {
+            return url;
+        }
+        }
+
         $(document).ready(function() {
         
             $('form').submit(function(event) {
@@ -43,15 +51,27 @@
                     var title = response.result.item.title;
                     var price = response.result.item.price;
                     var image = response.result.item.images[0];
+                    var url = response.result.item.url;
+                    var updatedImageURL = removeTwoSlashes(image);
         
                     // Check if the images array is null
                     if (image != null) {
                         // Display the product information
-                        $('#product_info').html('<h2>' + title + '</h2><img src="' + image + '" alt="' + title + '"><p>' + price + '</p>');
+                        $('#product_info').html('<h2>' + title + '</h2><img src="' + updatedImageURL + '" alt="' + title + '"><p>' + price + '</p>');
                     } else {
                         // Display a message if the images array is null
                         $('#product_info').html('<h2>No product image available</h2>');
                     }
+
+                    var item = {
+                        image: updatedImageURL,
+                        title: title,
+                        priceYuan: price,
+                        priceUSD: "1",
+                        url: taobaoLinkOrId
+                    }
+
+                    console.log(item);
         
                 });
         
